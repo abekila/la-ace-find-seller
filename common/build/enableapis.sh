@@ -6,41 +6,30 @@
 # To see all the enabled services...
 # gcloud services list  --enabled --sort-by="NAME"
 
-# Shared services
-# Enable Storage.
-gcloud services enable storage-component.googleapis.com
-# Enable Bigtable.
-gcloud services enable bigtable.googleapis.com
-# Enable Stackdriver
-gcloud services enable stackdriver.googleapis.com
-# Enable Cloud SQL
-gcloud services enable sql-component.googleapis.com
-# Enable Datastore
-gcloud services enable datastore.googleapis.com
+prerequisites=(
+    gcloud
+)
 
+for prerequisite in ${prerequisites[@]}; do
+    which $prerequisite ||
+        (echo 1>&2 -e "Missing package: [${prerequisite}]\nRequired packages: [${prerequisites[@]}]" && exit 1)
+done
 
-# The frontend application
-# Enable App Engine
-gcloud services enable appengine.googleapis.com
-# Enable Pubsub
-gcloud services enable pubsub.googleapis.com
+function enable_required_apis() {
 
-# Image processor
-# Enable Cloud Vision API
-gcloud services enable vision.googleapis.com
-# Enable Cloud Functions
-gcloud services enable cloudfunctions.googleapis.com
+    declare -a required_apis=(storage-component.googleapis.com bigtable.googleapis.com stackdriver.googleapis.com sql-component.googleapis.com 
+    datastore.googleapis.com appengine.googleapis.com pubsub.googleapis.com vision.googleapis.com cloudfunctions.googleapis.com
+    container.googleapis.com bigquery-json.googleapis.com containerregistry.googleapis.com compute.googleapis.com spanner.googleapis.com ) 
+    echo "Enabling required apis......"
 
-# The product application
-# Enable Kubernetes Engine
-gcloud services enable container.googleapis.com
-# Enable Bigquery
-gcloud services enable bigquery-json.googleapis.com
-# Enable Container Registry
-gcloud services enable containerregistry.googleapis.com 
+    for apis in "${required_apis[@]}"; do 
+       $(gcloud services enable "${apis}")
+    done
+ 
+}
 
-# The ads application
-# Enable Compute Engine
-gcloud services enable compute.googleapis.com
-# Enable Spanner
-gcloud services enable spanner.googleapis.com  
+main() {
+  enable_required_apis  
+}
+
+main 

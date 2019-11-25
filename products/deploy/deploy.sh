@@ -9,7 +9,7 @@ bash ../build/build.sh
 
 # The tag la-ace-products:0.1 is set in the build file. 
 # If you change it here, change it there to match. 
-docker tag la-ace-products:0.1 "gcr.io/$PROJECT_NAME/products"
+docker tag la-ace-products:0.1 "eu.gcr.io/$PROJECT_NAME/products"
 
 docker push "gcr.io/$PROJECT_NAME/products"
 
